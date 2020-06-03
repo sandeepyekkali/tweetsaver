@@ -58,6 +58,7 @@ class Searchresults extends Component {
         return (
          <div>
              <h3>Search Results</h3>
+             <p>*Drag to save tweets</p>
             {this.state.searchResults && 
                 <div className='text-center'>
                 {cardsArray}
