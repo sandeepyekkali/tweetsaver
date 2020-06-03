@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Navbar from './components/navbar';
+import Searchbar from './components/searchbar';
+import Searchresults from './components/searchresults';
+
 
 function App() {
+
+const [searchString, setsearchString] = useState('red')
+
+const handleSearchStringSubmit=(x)=>{
+  setsearchString(x)
+}
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar></Navbar>
+      <div className="container" style={{paddingTop:25, marginTop:50}}>
+      <div className="row">
+        <Searchbar onSearchStringSubmit = {handleSearchStringSubmit}></Searchbar>
+        </div>
+        <div className="row">
+        <div className="col-6"><Searchresults searchString={searchString}/></div>
+        <div className='col-6'><p>Saved</p></div>
+        </div>
+      </div>
     </div>
   );
 }
