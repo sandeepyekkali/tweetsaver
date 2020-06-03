@@ -13,15 +13,15 @@ class Searchresults extends Component {
         }
     }
 
-    componentWillReceiveProps(){
+    componentDidUpdate=async()=>{
         if(this.props.searchString){
-            axios({
-                url :`http://tweetsaver.herokuapp.com/?q=${this.props.searchString}&count=3`,
+           await axios({
+                url :`http://tweetsaver.herokuapp.com/?q=${this.props.searchString}&count=1`,
                 adapter: jsonpAdapter,  
             })
             .then(({data})=>{
                 this.setState({
-                    searchResults: data,
+                    searchResults: data.tweets,
                     searchString: null
                 })
                 console.log(data)
@@ -29,23 +29,37 @@ class Searchresults extends Component {
         }
     }
 
+    deleteSavedTweet=(id)=>{
+       this.setState(prevState=>{
+          let searchResults1 = prevState.searchResults
+        //   const index = searchResults.findIndex(tweet=>{
+        //       return tweet.id === id
+        //   })
+
+        //   searchResults.splice(index, 1)
+            
+          return {searchResults: searchResults1.filter(tweet=>{return id !== tweet.id})}
+       })
+       this.props.onSavedTweetsUpdated()
+    }
+
     render() {
 
-        if(this.state.searchResults === null){return <div>Loading</div>}
+        if(this.state.searchResults === null){return <h3>Search Results</h3>}
 
         const cardsArray = []
-        const {tweets} = this.state.searchResults
+        const {searchResults} = this.state
 
-        tweets.forEach(tweet=>{
-            cardsArray.push(<Tweetcard tweet={tweet}/>)
+        searchResults.forEach(tweet=>{
+            cardsArray.push(<Tweetcard handleDrop = {(id)=>this.deleteSavedTweet(id)} tweet={tweet}/>)
         })
 
 
         return (
          <div>
+             <h3>Search Results</h3>
             {this.state.searchResults && 
-                <div>
-                <p>Search Results Here</p>
+                <div className='text-center'>
                 {cardsArray}
             </div>}
          </div>
